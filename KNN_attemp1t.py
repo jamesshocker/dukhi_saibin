@@ -28,16 +28,16 @@ knn = KNN.KNeighborsClassifier(n_neighbors=2, weights='uniform', algorithm='auto
 knn.fit(X_train,Y_train) 
  
 # Get the probaility output from the trained method, using the 10% for testing
-prob_predict_train = knn.predict_proba(X_train)[:,1]
-prob_predict_valid = knn.predict_proba(X_valid)[:,1]
+prob_predict_train = knn.predict(X_train)
+prob_predict_valid = knn.predict(X_valid)
  
 # Experience shows me that choosing the top 15% as signal gives a good AMS score.
 # This can be optimized though!
-pcut = np.percentile(prob_predict_train,85)
+
  
 # This are the final signal and background predictions
-Yhat_train = prob_predict_train > pcut 
-Yhat_valid = prob_predict_valid > pcut
+Yhat_train = prob_predict_train
+Yhat_valid = prob_predict_valid 
  
 # To calculate the AMS data, first get the true positives and true negatives
 # Scale the weights according to the r cutoff.
@@ -53,7 +53,7 @@ s_valid = sum ( TruePositive_valid*(Yhat_valid==1.0) )
 b_valid = sum ( TrueNegative_valid*(Yhat_valid==1.0) )
  
 # Now calculate the AMS scores
-print 'Calculating AMS score for a probability cutoff pcut=',pcut
+print 'Calculating AMS score for a probability cutoff pcut='
 def AMSScore(s,b): return  math.sqrt (2.*( (s + b + 10.)*math.log(1.+s/(b+10.))-s))
 print '   - AMS based on 90% training   sample:',AMSScore(s_train,b_train)
 print '   - AMS based on 10% validation sample:',AMSScore(s_valid,b_valid)
@@ -66,9 +66,9 @@ I_test = list(data_test[:,0])
  
 # Get a vector of the probability predictions which will be used for the ranking
 print 'Building predictions'
-Predictions_test = knn.predict_proba(X_test)[:,1]
+Predictions_test = knn.predict(X_test)
 # Assign labels based the best pcut
-Label_test = list(Predictions_test>pcut)
+Label_test = list(Predictions_test)
 Predictions_test =list(Predictions_test)
  
 # Now we get the CSV data, using the probability prediction in place of the ranking
