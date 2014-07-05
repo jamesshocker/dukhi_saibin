@@ -24,7 +24,7 @@ W_valid = data_train[:,31][r>=0.9]
  
 # Train the GradientBoostingClassifier using our good features
 print 'Training classifier (this may take some time!)'
-knn = KNN.KNeighborsClassifier(n_neighbors=20, weights='uniform', algorithm='auto' ,leaf_size=200)
+knn = KNN.KNeighborsClassifier(n_neighbors=10, weights='uniform', algorithm='auto' ,leaf_size=200)
 knn.fit(X_train,Y_train) 
  
 # Get the probaility output from the trained method, using the 10% for testing
