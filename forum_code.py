@@ -7,7 +7,7 @@ import os
 print 'Loading training data.'
 # fname = os.path.normpath('D:\master_data\training\training.csv')
 # np.loadtxt(data_train, float)
-data_train = np.loadtxt('D:/master_data/training/new_training.csv', delimiter=',', skiprows=0, converters={26: lambda x:int(x=='s'.encode('utf-8')) } )
+data_train = np.loadtxt('D:/master_data/training/training.csv', delimiter=',', skiprows=0, converters={26: lambda x:int(x=='s'.encode('utf-8')) } )
  
 # Pick a random seed for reproducible results. Choose wisely!
 np.random.seed(42)
@@ -27,7 +27,8 @@ W_valid = data_train[:,25][r>=0.9]
  
 # Train the GradientBoostingClassifier using our good features
 print 'Training classifier (this may take some time!)'
-gbc = GBC(n_estimators=1000, max_depth=5,min_samples_leaf=200,max_features=10,verbose=1)
+gbc = GBC(learning_rate=0.03, n_estimators=200, max_depth=15,min_samples_leaf=200,verbose=1,subsample=0.8)
+#gbc = GBC(learning_rate = 0.03, n_estimators=300, max_depth=10,min_samples_leaf=200,verbose=1, subsample = 0.9)
 gbc.fit(X_train,Y_train) 
  
 # Get the probaility output from the trained method, using the 10% for testing

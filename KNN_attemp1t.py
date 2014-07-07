@@ -4,7 +4,7 @@ import math
  
 # Load training data
 print 'Loading training data.'
-data_train = np.loadtxt( 'C:/Users/ryan/Documents/GitHub/Kodiyal/data/train/training.csv', delimiter=',', skiprows=1, converters={32: lambda x:int(x=='s'.encode('utf-8')) } )
+data_train = np.loadtxt( 'C:/Users/evonjames/Documents/GitHub/Kodiyal/data/train/training.csv', delimiter=',', skiprows=1, converters={32: lambda x:int(x=='s'.encode('utf-8')) } )
  
 # Pick a random seed for reproducible results. Choose wisely!
 np.random.seed(311)
@@ -24,7 +24,7 @@ W_valid = data_train[:,31][r>=0.9]
  
 # Train the GradientBoostingClassifier using our good features
 print 'Training classifier (this may take some time!)'
-knn = KNN.KNeighborsClassifier(n_neighbors=2, weights='uniform', algorithm='auto' ,leaf_size=200)
+knn = KNN.KNeighborsClassifier(n_neighbors= 100, weights='uniform', algorithm='auto' ,leaf_size=200)
 knn.fit(X_train,Y_train) 
  
 # Get the probaility output from the trained method, using the 10% for testing
@@ -60,7 +60,7 @@ print '   - AMS based on 10% validation sample:',AMSScore(s_valid,b_valid)
  
 # Now we load the testing data, storing the data (X) and index (I)
 print 'Loading testing data'
-data_test = np.loadtxt( 'C:/Users/ryan/Documents/GitHub/Kodiyal/data/test/test.csv', delimiter=',', skiprows=1 )
+data_test = np.loadtxt( 'C:/Users/evonjames/Documents/GitHub/Kodiyal/data/test/test.csv', delimiter=',', skiprows=1 )
 X_test = data_test[:,1:31]
 I_test = list(data_test[:,0])
  
