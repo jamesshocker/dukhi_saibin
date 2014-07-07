@@ -1,39 +1,57 @@
 import numpy as np
-from sklearn import neighbors as KNN
+from sklearn.ensemble import GradientBoostingClassifier as GBC
+from sklearn.grid_search import GridSearchCV 
 import math
+import os
  
 # Load training data
 print 'Loading training data.'
-data_train = np.loadtxt( 'C:/Users/ryan/Documents/GitHub/Kodiyal/data/train/training.csv', delimiter=',', skiprows=1, converters={32: lambda x:int(x=='s'.encode('utf-8')) } )
+# fname = os.path.normpath('D:\master_data\training\training.csv')
+# np.loadtxt(data_train, float)
+data_train = np.loadtxt('D:/master_data/training/new_training.csv', delimiter=',', skiprows=0, converters={26: lambda x:int(x=='s'.encode('utf-8')) } )
  
 # Pick a random seed for reproducible results. Choose wisely!
-np.random.seed(311)
+np.random.seed(42)
 # Random number for training/validation splitting
 r =np.random.rand(data_train.shape[0])
  
 # Put Y(truth), X(data), W(weight), and I(index) into their own arrays
 print 'Assigning data to numpy arrays.'
 # First 90% are training
-Y_train = data_train[:,32][r<0.9]
-X_train = data_train[:,1:31][r<0.9]
-W_train = data_train[:,31][r<0.9]
-# Last 10% are validation
-Y_valid = data_train[:,32][r>=0.9]
-X_valid = data_train[:,1:31][r>=0.9]
-W_valid = data_train[:,31][r>=0.9]
+Y_train = data_train[:,26][r<0.9]
+X_train = data_train[:,1:24][r<0.9]
+W_train = data_train[:,25][r<0.9]
+# Lirst 10% are validation
+Y_valid = data_train[:,26][r>=0.9]
+X_valid = data_train[:,1:24][r>=0.9]
+W_valid = data_train[:,25][r>=0.9]
+ 
+#setting parameter grid_search
+param_grid = {'learning_rate': [0.1, 0.05, 0.03, 0.01],
+              'max_depth': [5, 10, 15, 20],
+              'min_samples_leaf': [100, 150, 200, 250],
+              'max_features': [10, 12, 14, 16],
+			  'subsample': [0.8, 0.6, 0.5]
+              } 
+ 
  
 # Train the GradientBoostingClassifier using our good features
 print 'Training classifier (this may take some time!)'
-knn = KNN.KNeighborsClassifier(n_neighbors=333, weights='uniform', algorithm='auto' ,leaf_size=201)
-knn.fit(X_train,Y_train) 
+gbc = GBC(n_estimators=200,verbose=1)
+gs_cv = GridSearchCV(gbc, param_grid, n_jobs=4).fit(X_train,Y_train) 
+print gs_cv.best_params_
+ 
+#predicting with best results
+gbc = GBC(n_estimators=200,verbose=1,gs_cv.best_params_) 
+gbc.fit(X_train,Y_train) 
  
 # Get the probaility output from the trained method, using the 10% for testing
-prob_predict_train = knn.predict_proba(X_train)[:,1]
-prob_predict_valid = knn.predict_proba(X_valid)[:,1]
+prob_predict_train = gbc.predict_proba(X_train)[:,1]
+prob_predict_valid = gbc.predict_proba(X_valid)[:,1]
  
 # Experience shows me that choosing the top 15% as signal gives a good AMS score.
 # This can be optimized though!
-pcut = np.percentile(prob_predict_train,50)
+pcut = np.percentile(prob_predict_train,85)
  
 # This are the final signal and background predictions
 Yhat_train = prob_predict_train > pcut 
@@ -60,13 +78,13 @@ print '   - AMS based on 10% validation sample:',AMSScore(s_valid,b_valid)
  
 # Now we load the testing data, storing the data (X) and index (I)
 print 'Loading testing data'
-data_test = np.loadtxt( 'C:/Users/ryan/Documents/GitHub/Kodiyal/data/test/test.csv', delimiter=',', skiprows=1 )
-X_test = data_test[:,1:31]
+data_test = np.loadtxt('D:/master_data/test/new_test.csv', delimiter=',', skiprows=0 )
+X_test = data_test[:,1:24]
 I_test = list(data_test[:,0])
  
 # Get a vector of the probability predictions which will be used for the ranking
 print 'Building predictions'
-Predictions_test = knn.predict_proba(X_test)[:,1]
+Predictions_test = gbc.predict_proba(X_test)[:,1]
 # Assign labels based the best pcut
 Label_test = list(Predictions_test>pcut)
 Predictions_test =list(Predictions_test)

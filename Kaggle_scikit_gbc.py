@@ -24,7 +24,7 @@ W_valid = data_train[:,31][r>=0.9]
  
 # Train the GradientBoostingClassifier using our good features
 print 'Training classifier (this may take some time!)'
-gbc = GBC(learning_rate=0.03, n_estimators=500, max_depth=10,min_samples_leaf=200,max_features=15,verbose=1)
+gbc = GBC(learning_rate=0.03, n_estimators=200, max_depth=15,min_samples_leaf=200,verbose=1,subsample=0.5)
 gbc.fit(X_train,Y_train) 
  
 # Get the probaility output from the trained method, using the 10% for testing
