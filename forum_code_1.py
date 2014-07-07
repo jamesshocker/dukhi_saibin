@@ -1,34 +1,30 @@
 import numpy as np
 from sklearn.ensemble import GradientBoostingClassifier as GBC
 import math
-import os
  
 # Load training data
 print 'Loading training data.'
-# fname = os.path.normpath('D:\master_data\training\training.csv')
-# np.loadtxt(data_train, float)
-data_train = np.loadtxt('D:/master_data/training/training.csv', delimiter=',', skiprows=0, converters={26: lambda x:int(x=='s'.encode('utf-8')) } )
+data_train = np.loadtxt( 'D:/master_data/training/training.csv', delimiter=',', skiprows=1, converters={32: lambda x:int(x=='s'.encode('utf-8')) } )
  
 # Pick a random seed for reproducible results. Choose wisely!
-np.random.seed(42)
+np.random.seed(311)
 # Random number for training/validation splitting
 r =np.random.rand(data_train.shape[0])
  
 # Put Y(truth), X(data), W(weight), and I(index) into their own arrays
 print 'Assigning data to numpy arrays.'
 # First 90% are training
-Y_train = data_train[:,26][r<0.9]
-X_train = data_train[:,1:24][r<0.9]
-W_train = data_train[:,25][r<0.9]
+Y_train = data_train[:,32][r<0.9]
+X_train = data_train[:,1:31][r<0.9]
+W_train = data_train[:,31][r<0.9]
 # Lirst 10% are validation
-Y_valid = data_train[:,26][r>=0.9]
-X_valid = data_train[:,1:24][r>=0.9]
-W_valid = data_train[:,25][r>=0.9]
+Y_valid = data_train[:,32][r>=0.9]
+X_valid = data_train[:,1:31][r>=0.9]
+W_valid = data_train[:,31][r>=0.9]
  
 # Train the GradientBoostingClassifier using our good features
 print 'Training classifier (this may take some time!)'
-gbc = GBC(learning_rate=0.03, n_estimators=200, max_depth=15,min_samples_leaf=200,verbose=1,subsample=0.8)
-#gbc = GBC(learning_rate = 0.03, n_estimators=300, max_depth=10,min_samples_leaf=200,verbose=1, subsample = 0.9)
+gbc = GBC(learning_rate=0.03, n_estimators=200, max_depth=20,min_samples_leaf=200,verbose=1,subsample=0.8)
 gbc.fit(X_train,Y_train) 
  
 # Get the probaility output from the trained method, using the 10% for testing
@@ -64,8 +60,8 @@ print '   - AMS based on 10% validation sample:',AMSScore(s_valid,b_valid)
  
 # Now we load the testing data, storing the data (X) and index (I)
 print 'Loading testing data'
-data_test = np.loadtxt('D:/master_data/test/new_test.csv', delimiter=',', skiprows=0 )
-X_test = data_test[:,1:24]
+data_test = np.loadtxt( 'D:/master_data/test/test.csv', delimiter=',', skiprows=1 )
+X_test = data_test[:,1:31]
 I_test = list(data_test[:,0])
  
 # Get a vector of the probability predictions which will be used for the ranking
@@ -92,8 +88,8 @@ for y in range(len(resultlist)):
 resultlist = sorted(resultlist, key=lambda a_entry: a_entry[0])
  
 # Write the result list data to a csv file
-print 'Writing a final csv file Kaggle_higgs_prediction_output.csv'
-fcsv = open('Kaggle_higgs_prediction_output.csv','w')
+print 'Writing a final csv file Kaggle_higgs_prediction_output3.csv'
+fcsv = open('Kaggle_higgs_prediction_output3.csv','w')
 fcsv.write('EventId,RankOrder,Class\n')
 for line in resultlist:
     theline = str(line[0])+','+str(line[1])+','+line[2]+'\n'
