@@ -28,21 +28,20 @@ W_valid = data_train[:,25][r>=0.9]
  
 #setting parameter grid_search
 param_grid = {'learning_rate': [0.1, 0.05, 0.03, 0.01],
-              'max_depth': [5, 10, 15, 20],
-              'min_samples_leaf': [100, 150, 200, 250],
-              'max_features': [10, 12, 14, 16],
-			  'subsample': [0.8, 0.6, 0.5]
-              } 
+              'max_depth': [10, 15, 20],
+              'min_samples_leaf': [200, 250],
+              'max_features': [10, 15, 20]
+        	} 
  
  
 # Train the GradientBoostingClassifier using our good features
 print 'Training classifier (this may take some time!)'
 gbc = GBC(n_estimators=200,verbose=1)
-gs_cv = GridSearchCV(gbc, param_grid, n_jobs=4).fit(X_train,Y_train) 
+gs_cv = GridSearchCV(gbc, param_grid, n_jobs=5).fit(X_train,Y_train) 
 print gs_cv.best_params_
  
 #predicting with best results
-gbc = GBC(n_estimators=200,verbose=1,gs_cv.best_params_) 
+gbc = GBC(n_estimators=200,verbose=1,**gs_cv.best_params_) 
 gbc.fit(X_train,Y_train) 
  
 # Get the probaility output from the trained method, using the 10% for testing
