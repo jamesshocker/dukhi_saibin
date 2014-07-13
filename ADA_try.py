@@ -31,7 +31,7 @@ bdt = AdaBoostClassifier(DecisionTreeClassifier(max_features=10,max_depth=5,min_
                          learning_rate,=1
 						 algorithm="SAMME",
                          n_estimators=50)
-
+bdt.fit(X_train,Y_train) 
  
 # Get the probaility output from the trained method, using the 10% for testing
 prob_predict_train = bdt.predict_proba(X_train)[:,1]
