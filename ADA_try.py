@@ -28,7 +28,7 @@ print 'Training classifier (this may take some time!)'
 
 # Create and fit an AdaBoosted decision tree
 bdt = AdaBoostClassifier(DecisionTreeClassifier(max_features=10,max_depth=5,min_samples_split=2,min_samples_leaf=1),
-                         learning_rate,=1
+                         learning_rate =1,
 						 algorithm="SAMME",
                          n_estimators=50)
 bdt.fit(X_train,Y_train) 
