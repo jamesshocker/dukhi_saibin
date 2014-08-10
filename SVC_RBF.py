@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.svm import SVC
+from sklearn import preprocessing
 import math
  
 # Load training data
@@ -23,10 +24,16 @@ Y_valid = data_train[:,32][r>=0.9]
 X_valid = data_train[:,1:31][r>=0.9]
 W_valid = data_train[:,31][r>=0.9]
  
-# Train the GradientBoostingClassifier using our good features
+#preprocessing 
+print 'Preprocessing'
+X_trainTT = X_train.transpose()
+scaler = preprocessing.MinMaxScaler().fit(X_trainTT)
+X_trainTT = scaler.transform(X_trainTT) 
+X_train = X_trainTT.transpose()
+ 
+# Train the SVM RBF Classifier using our good features
 print 'Training classifier (this may take some time!)'
 
-# Create and fit an AdaBoosted decision tree
 bdt = SVC(C=1.0, coef0=0.0, degree=3,
     gamma=0.0, max_iter=100, probability=True,
     random_state=None, shrinking=True, tol=0.001, verbose=True)
@@ -68,6 +75,12 @@ print 'Loading testing data'
 data_test = np.loadtxt( 'C:/Users/ryan/Documents/GitHub/Kodiyal/data/test/test.csv', delimiter=',', skiprows=1 )
 X_test = data_test[:,1:31]
 I_test = list(data_test[:,0])
+
+print 'Preprocessing'
+X_testTT = X_test.transpose()
+scaler = preprocessing.MinMaxScaler().fit(X_testTT)
+X_testTT = scaler.transform(X_testTT) 
+X_test = X_testTT.transpose()
  
 # Get a vector of the probability predictions which will be used for the ranking
 print 'Building predictions'
