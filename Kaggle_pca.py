@@ -19,7 +19,7 @@ n_features = 30
 
 # Load training data
 print 'Loading training data.'
-data_train = np.loadtxt( 'C:/Users/ryan/Documents/GitHub/Kodiyal/data/train/training.csv', delimiter=',', skiprows=1, converters={32: lambda x:int(x=='s'.encode('utf-8')) } )
+data_train = np.loadtxt( 'C:/Users/evonjames/Documents/GitHub/Kodiyal/data/train/training.csv', delimiter=',', skiprows=1, converters={32: lambda x:int(x=='s'.encode('utf-8')) } )
 
 # Pick a random seed for reproducible results. Choose wisely!
 np.random.seed(311)
@@ -67,7 +67,7 @@ def lw_score(X):
     return np.mean(cross_val_score(LedoitWolf(), X))
 
 
-for X, title in [X_train, 'Training data')]:
+for X, title in [X_train, 'Training data']:
     pca_scores, fa_scores = compute_scores(X)
     n_components_pca = n_components[np.argmax(pca_scores)]
     n_components_fa = n_components[np.argmax(fa_scores)]
