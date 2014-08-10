@@ -27,10 +27,10 @@ W_valid = data_train[:,31][r>=0.9]
 print 'Training classifier (this may take some time!)'
 
 # Create and fit an AdaBoosted decision tree
-bdt = AdaBoostClassifier(DecisionTreeClassifier(max_features=11,max_depth= 11,min_samples_split=4,min_samples_leaf=1),
+bdt = AdaBoostClassifier(DecisionTreeClassifier(max_features=12,max_depth= 12,min_samples_split=100,min_samples_leaf=10),
                          learning_rate = 0.1,
 						 algorithm="SAMME",
-                         n_estimators= 50)
+                         n_estimators= 100)
 bdt.fit(X_train,Y_train) 
  
 # Get the probaility output from the trained method, using the 10% for testing

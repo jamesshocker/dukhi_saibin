@@ -27,7 +27,7 @@ W_valid = data_train[:,31][r>=0.9]
 print 'Training classifier (this may take some time!)'
 
 # Create and fit an AdaBoosted decision tree
-bdt = AdaBoostClassifier(DecisionTreeClassifier(max_features=11,max_depth= 11,min_samples_split=4,min_samples_leaf=1),
+bdt = AdaBoostClassifier(DecisionTreeClassifier(max_features=12,max_depth= 11,min_samples_split=2,min_samples_leaf=1),
                          learning_rate = 0.1,
 						 algorithm="SAMME",
                          n_estimators= 50)
@@ -94,8 +94,8 @@ for y in range(len(resultlist)):
 resultlist = sorted(resultlist, key=lambda a_entry: a_entry[0])
  
 # Write the result list data to a csv file
-print 'Writing a final csv file Kaggle_higgs_prediction_output3.csv'
-fcsv = open('Kaggle_higgs_prediction_output3.csv','w')
+print 'Writing a final csv file Kaggle_higgs_prediction_output1.csv'
+fcsv = open('Kaggle_higgs_prediction_output1.csv','w')
 fcsv.write('EventId,RankOrder,Class\n')
 for line in resultlist:
     theline = str(line[0])+','+str(line[1])+','+line[2]+'\n'
