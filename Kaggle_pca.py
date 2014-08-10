@@ -67,7 +67,8 @@ def lw_score(X):
     return np.mean(cross_val_score(LedoitWolf(), X))
 
 
-for X, title in [X_train, 'Training data']:
+
+for X, title in [(X_train, 'Training data')]:
     pca_scores, fa_scores = compute_scores(X)
     n_components_pca = n_components[np.argmax(pca_scores)]
     n_components_fa = n_components[np.argmax(fa_scores)]
