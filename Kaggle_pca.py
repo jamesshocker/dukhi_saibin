@@ -17,6 +17,10 @@ from sklearn.grid_search import GridSearchCV
 # Create the data
 n_features = 30
 
+# Load training data
+print 'Loading training data.'
+data_train = np.loadtxt( 'C:/Users/ryan/Documents/GitHub/Kodiyal/data/train/training.csv', delimiter=',', skiprows=1, converters={32: lambda x:int(x=='s'.encode('utf-8')) } )
+
 # Pick a random seed for reproducible results. Choose wisely!
 np.random.seed(311)
 # Random number for training/validation splitting
